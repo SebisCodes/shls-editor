@@ -16,6 +16,6 @@
  */
 
 export { getSection, getRecordAt } from './edits-lines.js?v=3';
-export * from './edits-records.js?v=3';
-export * from './edits-keys.js?v=3';
-export * from './edits-sections.js?v=3';
+export * from './edits-records.js?v=4';
+export * from './edits-keys.js?v=4';
+export * from './edits-sections.js?v=4';

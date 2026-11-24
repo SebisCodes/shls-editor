@@ -3,11 +3,11 @@
  * selection (as the buttons above the view do), and snippets written at the cursor in the code.
  */
 
-import { escapeHtml } from './shls.js?v=7';
-import { state, ui } from './state.js?v=2';
-import { runViewAction } from './view-actions.js?v=3';
-import { writeCodeRange } from './code-input.js?v=3';
-import { addHistoryStep } from './history.js?v=3';
+import { escapeHtml } from './shls.js?v=8';
+import { state, ui } from './state.js?v=3';
+import { runViewAction } from './view-actions.js?v=4';
+import { writeCodeRange } from './code-input.js?v=4';
+import { addHistoryStep } from './history.js?v=4';
 
 /** The length of a date as YYYY-MM-DD. */
 const DATE_LENGTH = 10;

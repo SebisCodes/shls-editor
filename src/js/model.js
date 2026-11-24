@@ -1,16 +1,20 @@
 /**
- * Reading the code into the model (shls.js parseModel()) and drawing what depends on it: the
- * records view, the problems, the side panel and, while they are shown, the conversion and the
- * outline. Typing reads the code after a pause (startModelUpdate).
+ * Reading the code into the model (template-lines.js parseCodeModel()) and drawing what depends on it: the
+ * records view (of a template: the example view or the template view, records-views.js), the
+ * controls of template placeholders, the problems, the side panel and, while they are shown, the
+ * conversion and the outline. Typing reads the code after a pause (startModelUpdate).
  */
 
-import { parseModel } from './shls.js?v=7';
-import { state, areas, ui } from './state.js?v=2';
-import { renderProblems } from './problems.js?v=3';
-import { renderNode } from './node-panel.js?v=3';
-import { renderConvertResult } from './convert-panel.js?v=3';
-import { renderOutline } from './outline-panel.js?v=3';
-import { renderCode } from './code-view.js?v=3';
+import { parseCodeModel } from './template-lines.js?v=1';
+import { state, areas, ui } from './state.js?v=3';
+import { renderProblems } from './problems.js?v=4';
+import { renderNode } from './node-panel.js?v=4';
+import { renderConvertResult } from './convert-panel.js?v=4';
+import { renderOutline } from './outline-panel.js?v=4';
+import { renderCode } from './code-view.js?v=4';
+import { updateRecordsView, getViewModel, getSelectedTemplatePlace, selectTemplatePlace } from './records-views.js?v=1';
+import { showHits } from './view-bar.js?v=4';
+import { renderTemplateControls } from './template-panel.js?v=1';
 
 /**
  * Reads the code into the model now and draws everything that shows it.
@@ -18,14 +22,34 @@ import { renderCode } from './code-view.js?v=3';
  */
 export function updateModel() {
     clearTimeout(state.modelTimer);
-    state.model = parseModel(state.code);
+    state.model = parseCodeModel(state.code);
     state.hlModel = state.model;
     state.problems = state.model.problems;
-    areas.view.render(state.model);
+    updateRecordsView();
+    areas.view.render(getViewModel());
+    renderTemplateControls();
     renderProblems();
     renderNode();
     if (!ui.convert.hidden) renderConvertResult();
     if (!ui.outline.hidden) renderOutline();
+}
+
+/**
+ * Builds the view of a template again and draws the records view, the controls of template
+ * placeholders, the matches of the search and the side panel: after a switch of the view, and
+ * when the page's examples change. An open edit in place is written first (it belongs to the
+ * view before), and the selection stays on the same place of the template.
+ * @returns {void}
+ */
+export function renderRecordsView() {
+    if (areas.view.isEditing()) areas.view.stopEdit();
+    const place = getSelectedTemplatePlace();
+    updateRecordsView();
+    areas.view.render(getViewModel());
+    selectTemplatePlace(place, { scroll: false });
+    renderTemplateControls();
+    showHits();
+    renderNode();
 }
 
 /**
@@ -44,6 +68,6 @@ export function startModelUpdate(delay) {
  * @returns {object|null} the model, null when the text cannot be read or has no section.
  */
 export function getReadableModel(text) {
-    const model = parseModel(text);
+    const model = parseCodeModel(text);
     return !model.error && model.sections.length > 0 ? model : null;
 }

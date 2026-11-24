@@ -15,10 +15,10 @@
  * view-path.js.
  */
 
-import { escapeHtml } from './shls.js?v=7';
+import { escapeHtml } from './shls.js?v=8';
 import { createRows } from './view-rows.js?v=3';
 import { getPathParts, getPlaceId, getRowPlace } from './view-path.js?v=2';
-import { renderRow, renderPath } from './view-render.js?v=2';
+import { renderRow, renderPath } from './view-render.js?v=3';
 import { createInPlaceEdit } from './view-edit.js?v=2';
 import { startViewInput } from './view-input.js?v=2';
 

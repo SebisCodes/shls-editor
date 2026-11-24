@@ -4,7 +4,7 @@
  * CSV and JSON Lines files read as records.
  */
 
-import { formatJson, parseJson } from './shls.js?v=7';
+import { formatJson, parseJson } from './shls.js?v=8';
 
 /**
  * Returns a CSV cell, quoted when it holds a separator, a quote, a line break or spaces at its ends.

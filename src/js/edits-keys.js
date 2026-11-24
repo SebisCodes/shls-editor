@@ -4,7 +4,7 @@
  * key gets the value "-" in every record.
  */
 
-import { getKeyAt, getRecordsAt, getKeyEnd, getFieldEnd, getCleanValue } from './shls.js?v=7';
+import { getKeyAt, getRecordsAt, getKeyEnd, getFieldEnd, getCleanValue } from './shls.js?v=8';
 import { NO_VALUE, getIndentText, getEditedCode, getSection } from './edits-lines.js?v=3';
 
 /** The name of a new key. */

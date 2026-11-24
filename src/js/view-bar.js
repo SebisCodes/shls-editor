@@ -4,14 +4,15 @@
  * of the selection, and the code cursor that marks its record, key or value in the view.
  */
 
-import { createView } from './view.js?v=11';
+import { createView } from './view.js?v=12';
 import { getPathText } from './view-path.js?v=2';
-import { state, areas, ui, NARROW_SCREEN, getElement, showToast, translate } from './state.js?v=2';
-import { showRowInCode, showLineBand } from './code-view.js?v=3';
-import { getLineIndex } from './text-position.js?v=2';
-import { renderNode } from './node-panel.js?v=3';
-import { editInView, runViewAction } from './view-actions.js?v=3';
-import { showPane } from './layout.js?v=3';
+import { state, areas, ui, NARROW_SCREEN, getElement, showToast, translate } from './state.js?v=3';
+import { showRowInCode, showLineBand } from './code-view.js?v=4';
+import { getLineIndex } from './text-position.js?v=3';
+import { renderNode } from './node-panel.js?v=4';
+import { editInView, runViewAction } from './view-actions.js?v=4';
+import { showPane } from './layout.js?v=4';
+import { getViewLine } from './records-views.js?v=1';
 
 /** The pause after typing in the search before it searches, in milliseconds. */
 const SEARCH_DELAY = 160;
@@ -129,7 +130,7 @@ function selectNextHit(direction) {
  * Shows "3 / 7" (the current match of all), "0", or nothing without a search.
  * @returns {void}
  */
-function showHits() {
+export function showHits() {
     const hits = areas.view.getHits();
     hitsOutput.textContent = searchField.value.trim() ? (hits.count ? `${hits.index + 1} / ${hits.count}` : '0') : '';
 }
@@ -157,13 +158,14 @@ function watchCodeCursor() {
 }
 
 /**
- * Selects the record, key or value of the code cursor's line in the view; nothing while a field
- * is open or the code is not read yet.
+ * Selects the record, key or value of the code cursor's line in the view (in the example view of a
+ * template: the row that shows that line of the template); nothing while a field is open or the
+ * code is not read yet.
  * @returns {void}
  */
 export function selectRowAtCursor() {
     if (!state.model || areas.view.isEditing() || state.hlModel !== state.model) return;
-    const line = getLineIndex(ui.ta.selectionStart);
+    const line = getViewLine(getLineIndex(ui.ta.selectionStart));
     if (!areas.view.getRowAt(line)) return;
     areas.view.selectLineRow(line);
     renderNode();

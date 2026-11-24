@@ -4,13 +4,13 @@
  * SHLS cannot keep.
  */
 
-import { formatShls } from './shls.js?v=7';
-import { convertToSections, getRoundTrip, convertJsonToShls } from './convert.js?v=8';
-import { convertFromYaml, importYamlLibrary } from './yaml-text.js?v=3';
-import { convertFromCsv, convertFromJsonl } from './table-text.js?v=2';
+import { formatShls } from './shls.js?v=8';
+import { convertToSections, getRoundTrip, convertJsonToShls } from './convert.js?v=9';
+import { convertFromYaml, importYamlLibrary } from './yaml-text.js?v=4';
+import { convertFromCsv, convertFromJsonl } from './table-text.js?v=3';
 import { openConfirmation } from './dialogs.js?v=5';
-import { getElement, showToast, translate, DEFAULT_NAME } from './state.js?v=2';
-import { createDocument } from './documents.js?v=3';
+import { getElement, showToast, translate, DEFAULT_NAME } from './state.js?v=3';
+import { createDocument } from './documents.js?v=4';
 
 /** The largest file that is opened, in bytes. */
 const MAX_FILE_SIZE = 8 * 1024 * 1024;

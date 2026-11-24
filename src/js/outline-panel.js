@@ -3,11 +3,12 @@
  * problems and keys; a click selects the section in the view and its line in the code.
  */
 
-import { escapeHtml } from './shls.js?v=7';
-import { state, areas, ui, NARROW_SCREEN, translate } from './state.js?v=2';
+import { escapeHtml } from './shls.js?v=8';
+import { state, areas, ui, NARROW_SCREEN, translate } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { showRowInCode } from './code-view.js?v=3';
-import { showPane } from './layout.js?v=3';
+import { showRowInCode } from './code-view.js?v=4';
+import { showPane } from './layout.js?v=4';
+import { selectTemplatePlace } from './records-views.js?v=1';
 
 /**
  * Draws the outline of the sections.
@@ -81,7 +82,7 @@ export function startOutlinePanel() {
 function selectSectionFromOutline(event) {
     const button = event.target.closest('[data-sec]');
     if (!button) return;
-    areas.view.select({ kind: 'section', sec: button.dataset.sec });
+    selectTemplatePlace({ kind: 'section', sec: button.dataset.sec });
     showRowInCode(areas.view.getSelectedRow());
     if (NARROW_SCREEN.matches) showPane('draw');
 }

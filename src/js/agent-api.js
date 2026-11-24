@@ -5,19 +5,20 @@
  * "My documents", replacing text and showing a line. Every change is one undo step.
  */
 
-import { formatJson, convertFromJs } from './shls.js?v=7';
-import { getValueEdit, getRecordAddEdit } from './edits.js?v=8';
+import { formatJson, convertFromJs } from './shls.js?v=8';
+import { getValueEdit, getRecordAddEdit } from './edits.js?v=9';
 import { getPathText } from './view-path.js?v=2';
 import { store } from './files.js?v=8';
 import { BLANK } from './samples.js?v=3';
-import { state, areas, ui, AI_DOCUMENT, findSection } from './state.js?v=2';
+import { state, areas, ui, AI_DOCUMENT, findSection } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { setCode } from './history.js?v=3';
-import { showCodePosition } from './code-view.js?v=3';
-import { getLinePosition } from './text-position.js?v=2';
-import { getCodeEdit, showEditError, writeCodeEdit } from './view-actions.js?v=3';
-import { selectRowAtCursor } from './view-bar.js?v=3';
-import { openDocument, createDocument } from './documents.js?v=3';
+import { setCode } from './history.js?v=4';
+import { showCodePosition } from './code-view.js?v=4';
+import { getLinePosition } from './text-position.js?v=3';
+import { getCodeEdit, showEditError, writeCodeEdit } from './view-actions.js?v=4';
+import { selectRowAtCursor } from './view-bar.js?v=4';
+import { openDocument, createDocument } from './documents.js?v=4';
+import { getSelectedTemplateRow } from './records-views.js?v=1';
 
 /** The indentation of the JSON that get_records returns, in spaces. */
 const JSON_INDENT = 2;
@@ -54,7 +55,7 @@ export function getProblemList() {
  *   context of the page that holds the document.
  */
 export function getPromptState() {
-    const selected = areas.view.getSelectedRow();
+    const selected = getSelectedTemplateRow();
     return {
         code: state.code, name: state.name, files: store.getSortedEntries().map(entry => entry.name),
         sel: state.code.slice(ui.ta.selectionStart, ui.ta.selectionEnd),

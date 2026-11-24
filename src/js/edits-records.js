@@ -3,7 +3,7 @@
  * as whole lines, the blank lines between records kept in their style.
  */
 
-import { getRecordLines, getKeyAt, getCleanValue } from './shls.js?v=7';
+import { getRecordLines, getKeyAt, getCleanValue } from './shls.js?v=8';
 import { getIndentText, getEditedCode, getSection, getRecordAt, hasBlankLineStyle } from './edits-lines.js?v=3';
 
 /* ---------- Values, keys and section names ---------- */

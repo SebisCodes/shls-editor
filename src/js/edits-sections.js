@@ -3,9 +3,10 @@
  * records, and the records of another SHLS text appended to the sections of the same name.
  */
 
-import { parseModel, getRecordLines, getIndent } from './shls.js?v=7';
+import { getRecordLines, getIndent } from './shls.js?v=8';
+import { parseCodeModel } from './template-lines.js?v=1';
 import { NO_VALUE, getSection } from './edits-lines.js?v=3';
-import { getRecordAddEdit } from './edits-records.js?v=3';
+import { getRecordAddEdit } from './edits-records.js?v=4';
 
 /** The name of a new section. */
 const DEFAULT_SECTION = 'Section';
@@ -29,7 +30,8 @@ export function getSectionAddEdit(code, model, name = DEFAULT_SECTION) {
 
 /**
  * Returns the edit that removes a section: every line from each of its section lines up to the
- * next section line of another section.
+ * next section line of another section; the control lines of a template stay, so every section of
+ * the template stays whole.
  * @param {string} code - the code.
  * @param {object} model - its model.
  * @param {string} sectionName - the section's name.
@@ -44,7 +46,7 @@ export function getSectionRemoveEdit(code, model, sectionName) {
     starts.forEach((start, i) => {
         if (start.name !== sectionName) return;
         const end = i + 1 < starts.length ? starts[i + 1].line : lines.length;
-        for (let line = start.line; line < end; line++) removed.add(line);
+        for (let line = start.line; line < end; line++) if (model.roles[line] !== 'control') removed.add(line);
     });
     const result = lines.filter((_, i) => !removed.has(i));
     while (result.length > 1 && !result[result.length - 1].trim() && !result[result.length - 2].trim()) result.pop();
@@ -87,14 +89,14 @@ export function getRecordsAppendEdit(code, model, other) {
         if (own && Array.isArray(data)) {
             for (const record of data) {
                 current = getRecordAddEdit(current, currentModel, { sec: otherSection.name, values: record }).code;
-                currentModel = parseModel(current);
+                currentModel = parseCodeModel(current);
                 added++;
             }
         } else if (!own && otherSection.keys) {
             const appended = getSectionWithRecords(current, currentModel, otherSection, data);
             current = appended.code;
             added += appended.added;
-            currentModel = parseModel(current);
+            currentModel = parseCodeModel(current);
         }
     }
     return { code: current, added };

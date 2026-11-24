@@ -4,12 +4,12 @@
  * the indentation (SHLS indents with spaces only); Ctrl+Z and Ctrl+Y undo and redo.
  */
 
-import { parseModel } from './shls.js?v=7';
-import { state, areas, ui } from './state.js?v=2';
-import { renderCode, syncScroll } from './code-view.js?v=3';
-import { startModelUpdate } from './model.js?v=3';
-import { addHistoryStep, undo, redo } from './history.js?v=3';
-import { saveToStorage } from './storage.js?v=3';
+import { parseCodeModel } from './template-lines.js?v=1';
+import { state, areas, ui } from './state.js?v=3';
+import { renderCode, syncScroll } from './code-view.js?v=4';
+import { startModelUpdate } from './model.js?v=4';
+import { addHistoryStep, undo, redo } from './history.js?v=4';
+import { saveToStorage } from './storage.js?v=4';
 
 /** Longer code is highlighted without reading it while typing. */
 const MAX_TYPING_MODEL_LENGTH = 300000;
@@ -41,7 +41,7 @@ export function startCodeInput() {
  */
 function readTypedCode() {
     state.code = ui.ta.value;
-    state.hlModel = state.code.length < MAX_TYPING_MODEL_LENGTH ? parseModel(state.code) : null;
+    state.hlModel = state.code.length < MAX_TYPING_MODEL_LENGTH ? parseCodeModel(state.code) : null;
     renderCode();
     startModelUpdate(state.code.length > LONG_CODE_LENGTH ? LONG_MODEL_DELAY : MODEL_DELAY);
     clearTimeout(state.histTimer);

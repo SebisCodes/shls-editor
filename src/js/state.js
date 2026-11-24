@@ -184,12 +184,3 @@ export function formatSize(bytes) {
 export function findSection(name) {
     return state.model?.sections.find(section => section.name === name);
 }
-
-/**
- * Returns the section the selection in the records view is in, or the first one.
- * @returns {object|null} the section of the model, null when the document has none.
- */
-export function getCurrentSection() {
-    const row = areas.view.getSelectedRow();
-    return findSection(row?.sec) || state.model?.sections[0] || null;
-}

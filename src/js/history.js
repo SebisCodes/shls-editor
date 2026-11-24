@@ -4,11 +4,12 @@
  * tells sync.js. Typing makes its undo step after a pause (code-input.js).
  */
 
-import { state, areas, ui, getElement, showToast } from './state.js?v=2';
-import { updateModel } from './model.js?v=3';
-import { renderCode } from './code-view.js?v=3';
-import { saveToStorage } from './storage.js?v=3';
-import { renderNode } from './node-panel.js?v=3';
+import { state, areas, ui, getElement, showToast } from './state.js?v=3';
+import { updateModel } from './model.js?v=4';
+import { renderCode } from './code-view.js?v=4';
+import { saveToStorage } from './storage.js?v=4';
+import { renderNode } from './node-panel.js?v=4';
+import { getSelectedTemplatePlace, selectTemplatePlace } from './records-views.js?v=1';
 
 /** The most undo steps a document keeps. */
 const MAX_HISTORY_STEPS = 300;
@@ -57,7 +58,7 @@ export function addHistoryStep() {
     const last = state.history[state.history.length - 1];
     const selection = ui.ta.selectionStart;
     if (last && last.code === state.code) { last.sel = selection; return; }
-    state.history.push({ code: state.code, sel: selection, view: areas.view.getSelectedPlace() });
+    state.history.push({ code: state.code, sel: selection, view: getSelectedTemplatePlace() });
     if (state.history.length > MAX_HISTORY_STEPS) state.history.shift();
     state.future = [];
     updateHistoryButtons();
@@ -84,7 +85,7 @@ export function undo() {
     const step = state.history[state.history.length - 1];
     setCode(step.code, { history: false });
     if (step.sel != null) ui.ta.setSelectionRange(Math.min(step.sel, state.code.length), Math.min(step.sel, state.code.length));
-    if (step.view) areas.view.select(step.view);
+    if (step.view) selectTemplatePlace(step.view);
     renderNode();
 }
 
@@ -97,6 +98,6 @@ export function redo() {
     if (!step) { showToast('Nothing to redo'); return; }
     state.history.push(step);
     setCode(step.code, { history: false });
-    if (step.view) areas.view.select(step.view);
+    if (step.view) selectTemplatePlace(step.view);
     renderNode();
 }

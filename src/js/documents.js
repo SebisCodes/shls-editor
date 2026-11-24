@@ -8,12 +8,13 @@ import { START, TEMPLATES, BLANK } from './samples.js?v=3';
 import { openConfirmation } from './dialogs.js?v=5';
 import { store } from './files.js?v=8';
 import { createFilesDialog } from './files-dialog.js?v=2';
-import { state, areas, ui, DEFAULT_NAME, STORAGE_FULL, historyByDocument, getElement, getElements, showToast } from './state.js?v=2';
-import { setCode, addHistoryStep, updateHistoryButtons, undo, redo } from './history.js?v=3';
-import { saveToStorage } from './storage.js?v=3';
-import { renderNode } from './node-panel.js?v=3';
-import { renderConvert } from './convert-panel.js?v=3';
-import { openFilePicker } from './file-import.js?v=3';
+import { state, areas, ui, DEFAULT_NAME, STORAGE_FULL, historyByDocument, getElement, getElements, showToast } from './state.js?v=3';
+import { setCode, addHistoryStep, updateHistoryButtons, undo, redo } from './history.js?v=4';
+import { saveToStorage } from './storage.js?v=4';
+import { renderNode } from './node-panel.js?v=4';
+import { renderConvert } from './convert-panel.js?v=4';
+import { openFilePicker } from './file-import.js?v=4';
+import { getSelectedTemplatePlace, selectTemplatePlace } from './records-views.js?v=1';
 
 const newButton = getElement('#btn-new'), newMenu = getElement('#new-menu');
 
@@ -37,7 +38,7 @@ export function showFileName() {
 export function openDocument(id, code) {
     clearTimeout(state.histTimer);
     if (state.saveTimer) { clearTimeout(state.saveTimer); saveToStorage(); }
-    if (state.fileId) { addHistoryStep(); historyByDocument.set(state.fileId, { history: state.history, future: state.future, view: areas.view.getSelectedPlace() }); }
+    if (state.fileId) { addHistoryStep(); historyByDocument.set(state.fileId, { history: state.history, future: state.future, view: getSelectedTemplatePlace() }); }
     code ??= store.code(id) ?? BLANK;
     state.fileId = id;
     state.name = store.getEntry(id)?.name || DEFAULT_NAME;
@@ -60,7 +61,7 @@ function showOpenedCode(code, kept) {
     ui.ta.setSelectionRange(0, 0);
     areas.view.select(null);
     setCode(code, { history: false });
-    if (kept && kept.view) areas.view.select(kept.view, { scroll: false });
+    if (kept && kept.view) selectTemplatePlace(kept.view, { scroll: false });
     addHistoryStep();
     updateHistoryButtons();
     showFileName();

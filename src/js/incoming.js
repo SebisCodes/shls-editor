@@ -5,13 +5,13 @@
  * own documents.
  */
 
-import { getRecordsAppendEdit } from './edits.js?v=8';
+import { getRecordsAppendEdit } from './edits.js?v=9';
 import { store } from './files.js?v=8';
-import { VIEWER } from './sync.js?v=23';
-import { state, ui, EDITOR, AI_DOCUMENT, showToast } from './state.js?v=2';
-import { setCode } from './history.js?v=3';
-import { getReadableModel } from './model.js?v=3';
-import { openDocument, createDocument } from './documents.js?v=3';
+import { VIEWER } from './sync.js?v=25';
+import { state, ui, EDITOR, AI_DOCUMENT, showToast } from './state.js?v=3';
+import { setCode } from './history.js?v=4';
+import { getReadableModel } from './model.js?v=4';
+import { openDocument, createDocument } from './documents.js?v=4';
 
 /**
  * Which document a document from an AI goes into.

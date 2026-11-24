@@ -1,15 +1,18 @@
 /**
  * The side panel's first tab: the selected section, key or record with its path and buttons.
  * A section and a key are renamed in their field; a record shows a field per value, written
- * into the code together with "Apply" or Enter (one undo step).
+ * into the code together with "Apply" or Enter (one undo step). In the example view of a template
+ * the panel shows the template's row the selected row stands for (records-views.js).
  */
 
-import { parseModel, escapeHtml } from './shls.js?v=7';
+import { escapeHtml } from './shls.js?v=8';
+import { parseCodeModel } from './template-lines.js?v=1';
 import { getPathText } from './view-path.js?v=2';
-import { getRecordAt, getValueEdit, getSectionRenameEdit, getKeyRenameEdit } from './edits.js?v=8';
-import { state, areas, ui, getElements, showToast, translate, findSection } from './state.js?v=2';
+import { getRecordAt, getValueEdit, getSectionRenameEdit, getKeyRenameEdit } from './edits.js?v=9';
+import { state, areas, ui, getElements, showToast, translate, findSection } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { editCodeFromTree, runViewAction } from './view-actions.js?v=3';
+import { editCodeFromTree, runViewAction } from './view-actions.js?v=4';
+import { getSelectedTemplateRow, getTemplateRows, EXAMPLE_EDIT_MESSAGE } from './records-views.js?v=1';
 
 /**
  * Draws the side panel for the selection; leaves it alone while a field in it is being typed into.
@@ -17,7 +20,9 @@ import { editCodeFromTree, runViewAction } from './view-actions.js?v=3';
  */
 export function renderNode() {
     if (ui.node.contains(document.activeElement) && document.activeElement.matches('input, textarea')) return;   // keep what is being typed
-    const row = areas.view.getSelectedRow();
+    const viewRow = areas.view.getSelectedRow();
+    const row = getSelectedTemplateRow();
+    if (viewRow && !row) { ui.node.innerHTML = `<p class="hint">${escapeHtml(translate(EXAMPLE_EDIT_MESSAGE))}</p>`; return; }
     if (!row) { ui.node.innerHTML = `<p class="hint">${escapeHtml(translate(state.model && state.model.sections.length ? 'Click a section, a key or a record in the middle.' : 'The document has no sections yet.'))}</p>`; return; }
     const section = findSection(row.sec);
     if (!section) { ui.node.innerHTML = ''; return; }
@@ -72,7 +77,7 @@ function renderSectionForm(section) {
  * @returns {string} the HTML.
  */
 function renderKeyForm(row) {
-    const siblings = areas.view.getRows().filter(other => other.kind === 'key' && other.sec === row.sec && other.parent === row.parent);
+    const siblings = getTemplateRows().rows.filter(other => other.kind === 'key' && other.sec === row.sec && other.parent === row.parent);
     const index = row.keyPath[row.keyPath.length - 1];
     return `<div class="node-form">${renderPath(row)}
             <label class="field"><span>Key</span><input id="n-key" value="${escapeHtml(row.label)}" spellcheck="false" data-no-i18n></label>
@@ -137,7 +142,7 @@ export function startNodePanel() {
  * @returns {void}
  */
 function renameFromField(event) {
-    const row = areas.view.getSelectedRow();
+    const row = getSelectedTemplateRow();
     if (!row) return;
     if (event.target.id === 'n-sec' && event.target.value !== row.sec) editCodeFromTree(() => getSectionRenameEdit(state.code, state.model, row.sec, event.target.value));
     if (event.target.id === 'n-key' && event.target.value !== row.label) editCodeFromTree(() => getKeyRenameEdit(state.code, state.model, row.sec, row.keyPath, event.target.value));
@@ -148,7 +153,7 @@ function renameFromField(event) {
  * @returns {void}
  */
 function writeRecordForm() {
-    const row = areas.view.getSelectedRow();
+    const row = getSelectedTemplateRow();
     if (!row || !row.recPath) return;
     const found = getRecordAt(state.model, row.sec, row.recPath);
     if (!found) return;
@@ -168,7 +173,7 @@ function createFormEdit(record, changedFields) {
     let code = state.code, model = state.model;
     for (const field of changedFields) {
         code = getValueEdit(code, model, record.fields[+field.dataset.f].line, field.value).code;
-        model = parseModel(code);
+        model = parseCodeModel(code);
     }
     return { code };
 }

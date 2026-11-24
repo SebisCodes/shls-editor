@@ -4,7 +4,7 @@
  * and the screen count them.
  */
 
-import { state } from './state.js?v=2';
+import { state } from './state.js?v=3';
 
 /**
  * Returns the line of a position in the open document's code.

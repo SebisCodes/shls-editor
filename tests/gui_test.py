@@ -7,7 +7,8 @@ Checks the records view (sections, key blocks, records, folding, path,
 search), code <-> view, highlighting, problems with their line, the side
 panel (record form, insert, convert with the token counter, outline),
 templates, My documents, opening JSON / YAML / CSV / JSON Lines files,
-AI links (also &mode=add), export and the phone layout."""
+AI links (also &mode=add), export, the phone layout and a template
+(?template=mustache: control lines, the encoder rewrite kept back)."""
 
 import base64
 import os
@@ -35,6 +36,21 @@ def check_that(cond, what):
     print(('ok    ' if cond else 'FAIL  ') + what)
     if not cond:
         failures.append(what)
+
+
+def show_side_panel(page, is_open):
+    """Opens or closes the side panel's drawer (it is closed at the start).
+
+    Args:
+        page (Page): the editor's page.
+        is_open (bool): True to open it, False to close it.
+
+    Returns:
+        None: the side panel is open or closed.
+    """
+    button = page.locator('#btn-panel')
+    if button.count() and button.is_visible() and (button.get_attribute('aria-expanded') == 'true') != is_open:
+        button.click()
 
 
 def set_code(page, text):
@@ -170,6 +186,8 @@ with sync_playwright() as pw:
     page.wait_for_timeout(300)
 
     # --- Record form in the side panel ---
+    check_that(page.locator('#side-panel').is_hidden() and page.get_attribute('#btn-panel', 'aria-expanded') == 'false', 'the side panel is a closed drawer at the start')
+    show_side_panel(page, True)
     get_field_row(page, 'Name', 'Laptop B2').locator('.trow-k').click()
     page.wait_for_timeout(200)
     check_that(page.locator('#node-wrap input[data-f]').count() == 5 and page.locator('#node-wrap input.now').input_value() == 'Laptop B2', 'the side panel shows the record as a form')
@@ -251,6 +269,7 @@ with sync_playwright() as pw:
     page.click('#btn-undo')
     page.click('#btn-undo')
     page.click('[data-itab=node]')
+    show_side_panel(page, False)
 
     # --- Templates, My documents ---
     for k, name in [('readme2', 'Key blocks first'), ('example2', 'Example2'), ('section', 'Section'), ('readme1', 'Products and companies')]:
@@ -334,6 +353,24 @@ with sync_playwright() as pw:
     check_that(page.evaluate('document.documentElement.scrollWidth') <= 391, 'phone: no sideways scrolling')
     page.click('[data-pane=code]')
     check_that(page.locator('#code').is_visible(), 'phone: the code view')
+
+    # --- Template placeholders (?template=mustache) ---
+    template = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'order-template.shls'), encoding='utf-8').read()
+    template_page = ctx.new_page()
+    template_page.on('pageerror', lambda e: errors.append(str(e)))
+    template_page.goto(URL + '?lang=en&template=mustache', wait_until='networkidle')
+    template_page.wait_for_timeout(500)
+    set_code(template_page, template)
+    check_that(get_state(template_page, 'S.problems.length') == 0 and template_page.locator('#hl .tp').count() == 0 and '{{name}}' in template_page.inner_text('#hl'), 'template: no problems, the tags stand in the code as written, without a color of their own')
+    check_that(get_state(template_page, 'S.model.sections.map(s => s.name)') == ['customer', 'order', 'note'], 'template: control lines are passed over by the reader')
+    template_page.evaluate("document.querySelector('#btn-format').click()")
+    template_page.wait_for_timeout(200)
+    check_that(get_state(template_page, 'S.code') == template and 'A template stays as written' in template_page.inner_text('#toast'), 'template: the encoder rewrite keeps the template, with a message')
+    set_code(template_page, 'person\n name\n{{#hasCity}}\n city\n{{/hasCity}}\n\n John Doe\n Springfield\n')
+    check_that('A line of section tags belongs between complete records' in template_page.inner_text('#code-error'), 'template: a control line inside a key block is listed')
+    set_code(page, template)
+    check_that(page.locator('#hl .tp').count() == 0 and get_state(page, 'S.model.sections.length') > 3, 'option off: the tags are SHLS text')
+    template_page.close()
 
     check_that(not errors, 'no script errors' + (': ' + '; '.join(errors) if errors else ''))
     browser.close()

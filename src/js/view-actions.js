@@ -5,15 +5,19 @@
  *
  * Every change is an edit of whole lines of the code (edits.js), written as one undo step;
  * the changed place is selected afterwards. Removing a section, or a key that records have
- * values for, asks first.
+ * values for, asks first. In the example view of a template a change of a row leads back to the
+ * template's row (records-views.js); a row whose line holds text of an example is refused with
+ * a message.
  */
 
 import { openConfirmation } from './dialogs.js?v=5';
-import * as edits from './edits.js?v=8';
-import { state, areas, CANNOT_READ, showToast, translate, findSection } from './state.js?v=2';
-import { setCode, addPendingHistoryStep } from './history.js?v=3';
-import { showRowInCode } from './code-view.js?v=3';
-import { renderNode } from './node-panel.js?v=3';
+import * as edits from './edits.js?v=9';
+import { state, areas, CANNOT_READ, showToast, translate, findSection } from './state.js?v=3';
+import { setCode, addPendingHistoryStep } from './history.js?v=4';
+import { showRowInCode } from './code-view.js?v=4';
+import { renderNode } from './node-panel.js?v=4';
+import { isTemplateEditWhole, TEMPLATE_EDIT_MESSAGE } from './template-lines.js?v=1';
+import { getTemplateRow, getTemplateRows, getExampleEditRefusal, getSelectedTemplatePlace, selectTemplatePlace, EXAMPLE_EDIT_MESSAGE } from './records-views.js?v=1';
 
 /** The message when a value's line breaks became spaces. */
 const VALUE_LINES_JOINED = 'SHLS values have one line - the line breaks became spaces';
@@ -37,13 +41,16 @@ export function editCodeFromTree(createEdit) {
 }
 
 /**
- * Returns the edit a function makes, or the reason it cannot be made.
+ * Returns the edit a function makes, or the reason it cannot be made. In a template an edit that
+ * would leave a section open or closed alone is not made.
  * @param {function(): import('./edits-lines.js').CodeEdit} createEdit - makes the edit; it throws an Error with a
  *   message for the user when the edit is not possible.
  * @returns {{edit: import('./edits-lines.js').CodeEdit}|{error: string}} the edit, or the reason.
  */
 export function getCodeEdit(createEdit) {
-    try { return { edit: createEdit() }; } catch (e) { return { error: e.message }; }
+    let edit;
+    try { edit = createEdit(); } catch (e) { return { error: e.message }; }
+    return isTemplateEditWhole(state.code, edit.code) ? { edit } : { error: TEMPLATE_EDIT_MESSAGE };
 }
 
 /**
@@ -63,10 +70,10 @@ export function showEditError(error) {
  */
 export function writeCodeEdit(edit) {
     if (edit.code === state.code) return;
-    const kept = areas.view.getSelectedPlace();
+    const kept = getSelectedTemplatePlace();
     addPendingHistoryStep();
     setCode(edit.code);
-    if (edit.select !== undefined) { if (edit.select) areas.view.select(edit.select); } else if (kept) areas.view.select(kept, { scroll: false });
+    if (edit.select !== undefined) { if (edit.select) selectTemplatePlace(edit.select); } else if (kept) selectTemplatePlace(kept, { scroll: false });
     const row = areas.view.getSelectedRow();
     if (row) showRowInCode(row);
     renderNode();
@@ -74,7 +81,8 @@ export function writeCodeEdit(edit) {
 
 /**
  * Takes an edit in place from the records view (the onEdit answer of createView(), whose shape
- * view.js dictates); a value that was cleaned (line breaks or leading spaces) is told.
+ * view.js dictates); a value that was cleaned (line breaks or leading spaces) is told. In the example
+ * view the edit goes to the template's row; a row that shows an example keeps its field closed.
  * @param {object} request - the edit.
  * @param {string} request.what - "value", "key" or "section".
  * @param {object} request.row - the row that is edited.
@@ -83,9 +91,11 @@ export function writeCodeEdit(edit) {
  * @returns {true|string} true when the edit is taken (or may start), else the reason.
  */
 export function editInView({ what, row, text, phase }) {
+    const refusal = getExampleEditRefusal(row);
+    if (refusal) { showEditError(refusal); return refusal; }
     if (phase === 'start') return true;
     if (!IN_VIEW_EDITS.includes(what)) return 'unknown';
-    const result = getCodeEdit(() => createInViewEdit(what, row, text));
+    const result = getCodeEdit(() => createInViewEdit(what, getTemplateRow(row), text));
     if ('error' in result) { showEditError(result.error); return result.error; }
     writeCodeEdit(result.edit);
     if (result.edit.changed) showToast(result.edit.changed === 'lines' ? VALUE_LINES_JOINED : VALUE_SPACES_REMOVED);
@@ -107,13 +117,16 @@ function createInViewEdit(what, row, text) {
 }
 
 /**
- * Runs an action of the buttons, the side panel or the Delete key on a row of the view.
+ * Runs an action of the buttons, the side panel or the Delete key on a row of the view; in the
+ * example view on the template's row it stands for.
  * @param {string} action - "add", "key", "dup", "up", "down", "remove" or "section".
- * @param {object|null} [row] - the row; without it, the selected one.
+ * @param {object|null} [viewRow] - the row of the view; without it, the selected one.
  * @returns {Promise<void>} settles when the action is done (removing may ask first).
  */
-export async function runViewAction(action, row = areas.view.getSelectedRow()) {
+export async function runViewAction(action, viewRow = areas.view.getSelectedRow()) {
     if (action === 'section') { editCodeFromTree(() => edits.getSectionAddEdit(state.code, state.model)); return; }
+    const row = getTemplateRow(viewRow);
+    if (viewRow && !row) { showEditError(EXAMPLE_EDIT_MESSAGE); return; }
     if (!row) { addFirstSection(action); return; }
     if (state.model.error && action !== 'remove') { showToast(CANNOT_READ); return; }
     if (row.kind === 'section' || row.kind === 'keys') { await runSectionAction(action, row); return; }
@@ -189,7 +202,7 @@ async function runKeyAction(action, row) {
  * @returns {Promise<void>} settles when the key is removed or kept.
  */
 async function removeKeyAfterAsking(row) {
-    const valueCount = areas.view.getRows().filter(other => other.kind === 'field' && other.sec === row.sec && other.label === row.label).length;
+    const valueCount = getTemplateRows().rows.filter(other => other.kind === 'field' && other.sec === row.sec && other.label === row.label).length;
     if (!valueCount || await openConfirmation({ title: `Remove the key "${row.label}"?`, text: `Its value is removed from every record of "${row.sec}" (${valueCount}). "Undo" brings it back.`, ok: 'Remove' })) {
         editCodeFromTree(() => edits.getKeyRemoveEdit(state.code, state.model, row.sec, row.keyPath));
     }
@@ -201,7 +214,7 @@ async function removeKeyAfterAsking(row) {
  * @returns {void}
  */
 function addNestedRecord(row) {
-    const records = areas.view.getRows().filter(other => other.parent === row.id && other.kind === 'record');
+    const records = getTemplateRows().rows.filter(other => other.parent === row.id && other.kind === 'record');
     const last = records[records.length - 1];
     if (!last) { showToast('This nested list has no records to add after'); return; }
     editCodeFromTree(() => edits.getRecordAddEdit(state.code, state.model, { sec: row.sec, recPath: last.recPath }));

@@ -4,11 +4,12 @@
  * sections).
  */
 
-import { highlight, escapeHtml } from './shls.js?v=7';
-import { state, areas, ui, LINE_HEIGHT, NARROW_SCREEN, formatSize } from './state.js?v=2';
+import { highlight, escapeHtml } from './shls.js?v=8';
+import { state, areas, ui, LINE_HEIGHT, NARROW_SCREEN, formatSize } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { getLineIndex, getColumnIndex, getLineStart, getLineEnd } from './text-position.js?v=2';
-import { updateHistoryButtons } from './history.js?v=3';
+import { getLineIndex, getColumnIndex, getLineStart, getLineEnd } from './text-position.js?v=3';
+import { updateHistoryButtons } from './history.js?v=4';
+import { getTemplateLines } from './records-views.js?v=1';
 
 /** Longer code is shown without highlighting, so typing stays fast. */
 const MAX_HIGHLIGHT_LENGTH = 600000;
@@ -131,13 +132,15 @@ export function showCodePosition(position, focus = true, selectionEnd = position
 
 /**
  * Selects the text of a row's lines in the code: from the first character after the
- * indentation to the end of its last line.
+ * indentation to the end of its last line (in the example view of a template: the template's
+ * lines the row comes from).
  * @param {object|null} row - a row of the records view (with its line and end).
  * @param {boolean} [focus] - true to focus the code.
  * @returns {void}
  */
 export function showRowInCode(row, focus = false) {
     if (!row || row.line == null) return;
-    const start = getLineStart(row.line) + /^ */.exec(state.model.lines[row.line] || '')[0].length;
-    showCodePosition(start, focus, Math.max(start, getLineEnd(row.end ?? row.line)));
+    const lines = getTemplateLines(row);
+    const start = getLineStart(lines.line) + /^ */.exec(state.model.lines[lines.line] || '')[0].length;
+    showCodePosition(start, focus, Math.max(start, getLineEnd(lines.end)));
 }

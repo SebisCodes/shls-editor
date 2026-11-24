@@ -5,11 +5,11 @@
  */
 
 import { openDialog } from './dialogs.js?v=5';
-import { areas, ui, TYPING_FIELDS, getElement } from './state.js?v=2';
-import { undo, redo } from './history.js?v=3';
-import { saveDocument, showExportDialog } from './export-dialog.js?v=3';
-import { selectSearchField } from './view-bar.js?v=3';
-import { setNewMenuOpen, isNewMenuOpen } from './documents.js?v=3';
+import { areas, ui, TYPING_FIELDS, getElement } from './state.js?v=3';
+import { undo, redo } from './history.js?v=4';
+import { saveDocument, showExportDialog } from './export-dialog.js?v=4';
+import { selectSearchField } from './view-bar.js?v=4';
+import { setNewMenuOpen, isNewMenuOpen } from './documents.js?v=4';
 
 /**
  * Connects the shortcuts of the page.

@@ -3,8 +3,8 @@
  * them), and YAML files read with the vendored yaml package, which loads on demand.
  */
 
-import { convertFromJs, formatPythonStr, PyNum } from './shls.js?v=7';
-import { isMap } from './convert.js?v=8';
+import { convertFromJs, formatPythonStr, PyNum } from './shls.js?v=8';
+import { isMap } from './convert.js?v=9';
 
 /** The most aliases a YAML file may expand. */
 const MAX_YAML_ALIASES = 1000;

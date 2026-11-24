@@ -7,7 +7,7 @@
  * the keys. JSON is the data as SHLSDecoder gives it: { section: [ { key: value … } ] }.
  */
 
-import { formatShls, parseShls, formatJson, formatPythonStr, parseJson } from './shls.js?v=7';
+import { formatShls, parseShls, formatJson, formatPythonStr, parseJson } from './shls.js?v=8';
 
 /** The indentation of JSON without another one, in spaces. */
 const JSON_INDENT = 2;

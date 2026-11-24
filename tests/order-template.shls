@@ -1,0 +1,35 @@
+{{#hasCustomer}}
+customer
+ name
+ street
+ postalCode
+ city
+
+ {{name}}
+ {{street}}
+ {{postalCode}}
+ {{city}}
+{{/hasCustomer}}
+order
+ number
+ items
+  label
+  quantity
+
+{{#orders}}
+ Order {{number}}
+ items
+  {{#items}}
+  {{label}}
+  {{quantity}}
+  {{/items}}
+{{/orders}}
+note
+ text
+
+{{#hasNote}}
+ {{note}}
+{{/hasNote}}
+{{^hasNote}}
+ No note
+{{/hasNote}}

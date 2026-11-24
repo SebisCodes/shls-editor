@@ -13,7 +13,8 @@
  * Start-up steps:
  *   1. the interface language (the AI prompt stays English) and the line wrap of the code;
  *   2. connect the areas: storage, code view, problems, records view, side panel, documents,
- *      opening files, keyboard, layout, Export and the dialogs;
+ *      opening files, keyboard, layout, Export, the dialogs and the controls of template
+ *      placeholders;
  *   3. take the stored settings and open the last document (or the welcome example);
  *   4. read and draw the document, and again once the language pack is there;
  *   5. start the AI Assistant, the WebMCP tools, the AI status, "Open in another editor" and
@@ -21,41 +22,44 @@
  *   6. offer the test hook window.shlsEditor.
  */
 
-import { parseModel, parseShls, formatShls, parseJson, convertFromJs, formatJson, getRecordLines } from './shls.js?v=7';
-import * as edits from './edits.js?v=8';
-import { importYamlLibrary } from './yaml-text.js?v=3';
+import { parseModel, parseShls, formatShls, parseJson, convertFromJs, formatJson, getRecordLines } from './shls.js?v=8';
+import * as edits from './edits.js?v=9';
+import { importYamlLibrary } from './yaml-text.js?v=4';
 import { START } from './samples.js?v=3';
-import { createAi } from './ai.js?v=8';
+import { createAi } from './ai.js?v=9';
 import { createMcp } from './mcp.js?v=5';
-import { createAiStatus } from './aistatus.js?v=8';
-import { createI18n } from './i18n.js?v=20';
+import { createAiStatus } from './aistatus.js?v=9';
+import { createI18n } from './i18n.js?v=22';
 import { createWrap } from './wrap.js?v=5';
 import { store } from './files.js?v=8';
-import { createSync } from './sync.js?v=23';
+import { createSync } from './sync.js?v=25';
 import './export-menu.js?v=6';
-import { startConvert } from './convert-to.js?v=14';
-import { state, areas, ui, EDITOR, STORAGE_FULL, showToast, translate } from './state.js?v=2';
-import { getSettings, startStorageSync } from './storage.js?v=3';
-import { setCode, addHistoryStep, undo, redo } from './history.js?v=3';
-import { updateModel } from './model.js?v=3';
-import { renderCode, syncScroll, showCodePosition, startCodeView } from './code-view.js?v=3';
-import { startCodeInput } from './code-input.js?v=3';
-import { startProblems } from './problems.js?v=3';
-import { createRecordsView, startViewBar } from './view-bar.js?v=3';
-import { editCodeFromTree } from './view-actions.js?v=3';
-import { renderNode, startNodePanel } from './node-panel.js?v=3';
-import { renderInsert, startInsertPanel } from './insert-panel.js?v=3';
-import { startConvertPanel } from './convert-panel.js?v=3';
-import { startOutlinePanel } from './outline-panel.js?v=3';
-import { showFileName, openDocument, createDocumentsDialog, startDocumentButtons } from './documents.js?v=3';
-import { startFileImport } from './file-import.js?v=3';
-import { startKeyboard } from './keyboard.js?v=3';
-import { showSplit, startLayout, startPanelTabs, startDialogs } from './layout.js?v=3';
-import { startExportDialog } from './export-dialog.js?v=3';
-import { receiveDocument, importExternalDocument } from './incoming.js?v=3';
+import { startConvert } from './convert-to.js?v=15';
+import { state, areas, ui, EDITOR, STORAGE_FULL, showToast, translate } from './state.js?v=3';
+import { getSettings, startStorageSync } from './storage.js?v=4';
+import { setCode, addHistoryStep, undo, redo } from './history.js?v=4';
+import { updateModel } from './model.js?v=4';
+import { renderCode, syncScroll, showCodePosition, startCodeView } from './code-view.js?v=4';
+import { startCodeInput } from './code-input.js?v=4';
+import { startProblems } from './problems.js?v=4';
+import { createRecordsView, startViewBar } from './view-bar.js?v=4';
+import { editCodeFromTree } from './view-actions.js?v=4';
+import { renderNode, startNodePanel } from './node-panel.js?v=4';
+import { renderInsert, startInsertPanel } from './insert-panel.js?v=4';
+import { startConvertPanel } from './convert-panel.js?v=4';
+import { startOutlinePanel } from './outline-panel.js?v=4';
+import { showFileName, openDocument, createDocumentsDialog, startDocumentButtons } from './documents.js?v=4';
+import { startFileImport } from './file-import.js?v=4';
+import { startKeyboard } from './keyboard.js?v=4';
+import { showSplit, startLayout, startPanelTabs, startDialogs } from './layout.js?v=4';
+import { startExportDialog } from './export-dialog.js?v=4';
+import { receiveDocument, importExternalDocument } from './incoming.js?v=5';
+import { startTemplateControls, updateTemplateView } from './template-panel.js?v=1';
+import { createTemplateExamples } from './template-examples.js?v=2';
+import { getViewMode, getViewModel, selectTemplatePlace } from './records-views.js?v=1';
 import {
     getPromptState, getProblemList, getAgentRecords, setAgentValue, addAgentRecord, getFileList, openFileByName, createFile, updateText, showAgentLine,
-} from './agent-api.js?v=3';
+} from './agent-api.js?v=4';
 
 /** The YAML package loads this long after the start, for opening YAML files. */
 const YAML_LIBRARY_DELAY = 1500;
@@ -112,6 +116,7 @@ function connectAreas() {
     startLayout();
     startExportDialog();
     startDialogs();
+    startTemplateControls();
 }
 
 /**
@@ -145,7 +150,7 @@ function openStartDocument() {
 function showStartDocument() {
     updateModel();
     renderCode();
-    areas.view.select({ kind: 'section', sec: state.model.sections[0]?.name }, { scroll: false });
+    selectTemplatePlace({ kind: 'section', sec: state.model.sections[0]?.name }, { scroll: false });
     renderNode();
     addHistoryStep();
     syncScroll();
@@ -168,6 +173,8 @@ function startAiAndSync() {
         getRemote: () => areas.sync?.getAiSettings() || null,
         fetchKey: () => (areas.sync ? areas.sync.fetchKey() : Promise.resolve(null)),
         hasValidKey: () => !!areas.sync?.hasValidKey(),
+        handleAiClick: openEditorDialog => (areas.sync ? areas.sync.handleAiClick(openEditorDialog) : openEditorDialog()),
+        getKeyDecline: () => areas.sync?.getKeyDecline() || '',
     });
     const agent = createMcp({
         onUse: () => areas.aiStatus.addDelivery('agent'),
@@ -208,6 +215,8 @@ function createSyncEditor() {
         onAi: () => areas.ai?.updateRemote(),
         onAiResult: () => areas.aiStatus.addDelivery('page'),
         onAiEnd: () => areas.aiStatus.resetDelivery(),
+        parseTemplate: message => createTemplateExamples(message),
+        onTemplate: () => updateTemplateView(),
     };
 }
 
@@ -219,7 +228,7 @@ function createSyncEditor() {
 function createTestHook() {
     return {
         state, store, setCode, undo, redo, receive: receiveDocument, revealInCode: showCodePosition, view: areas.view,
-        sync: () => areas.sync, analyse: updateModel, change: editCodeFromTree, edits,
+        sync: () => areas.sync, analyse: updateModel, change: editCodeFromTree, edits, viewMode: getViewMode, viewModel: getViewModel,
         codec: { decode: parseShls, encode: formatShls, parseJson, toJson: formatJson, fromJs: convertFromJs, analyse: parseModel, recordLines: getRecordLines },
     };
 }

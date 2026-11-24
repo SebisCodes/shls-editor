@@ -28,9 +28,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="/img/logo.svg">
-<link rel="stylesheet" href="/css/style.css?v=23">
+<link rel="stylesheet" href="/css/style.css?v=24">
 <script src="/js/lang-menu.js?v=1" defer></script>
-<script src="/js/theme.js?v=8" data-editor-page></script>
+<script src="/js/theme.js?v=9" data-editor-page></script>
 <script type="application/ld+json"><?= get_json_ld('jsonld') ?></script>
 </head>
 <body>
@@ -106,6 +106,10 @@
                 <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" aria-label="SHLS code"></textarea>
             </div>
         </div>
+        <div id="placeholder-box" class="placeholder-box template-control">
+            <div id="placeholder-list" class="placeholder-list" data-placeholder-list role="group" aria-label="Placeholders" hidden></div>
+            <button type="button" class="placeholder-header" data-placeholder-toggle aria-expanded="false" aria-controls="placeholder-list" title="The placeholders of the template - a click on one puts its tag at the cursor"><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg><span>Placeholders</span><span class="placeholder-count" data-placeholder-count data-no-i18n></span></button>
+        </div>
     </section>
 
     <div id="splitter" class="splitter" role="separator" aria-orientation="vertical" aria-label="Drag to change the width of the code area" title="Drag to change the width" tabindex="0"></div>
@@ -122,6 +126,10 @@
                 <button type="button" class="tool" id="node-down" title="Move the selected record or key down (Alt+Down)" aria-label="Move down"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
                 <button type="button" class="tool" id="node-del" title="Remove the selected record, key or section (Delete)" aria-label="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
             </div>
+            <div id="view-switch" class="view-switch template-control" role="radiogroup" aria-label="View of the records">
+                <button type="button" role="radio" data-view-set="example" aria-checked="true" title="The records filled with the examples">Examples</button>
+                <button type="button" role="radio" data-view-set="template" aria-checked="false" tabindex="-1" title="The template with its placeholders as written">Template</button>
+            </div>
             <div class="tree-search" role="search">
                 <input id="tree-search" type="search" placeholder="Search keys and values" aria-label="Search keys and values" spellcheck="false">
                 <span id="tree-hits" class="muted" aria-live="polite"></span>
@@ -135,10 +143,13 @@
                 <div id="path" class="path-row" data-no-i18n></div>
                 <button type="button" class="button small" id="path-copy" title="Copy the path of the selection">Copy path</button>
             </div>
+            <div id="view-note" class="view-note template-control" role="status" hidden>The examples could not be filled in - the records show the template</div>
         </div>
     </section>
 
-    <aside class="pane inspector" aria-label="Side panel">
+    <button type="button" class="tool panel-toggle" id="btn-panel" aria-controls="side-panel" aria-expanded="false" title="Show or hide the side panel" aria-label="Side panel"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg></button>
+
+    <aside class="pane inspector" id="side-panel" aria-label="Side panel">
         <div class="pane-header tabs" role="tablist">
             <button type="button" role="tab" data-itab="node" aria-selected="true" title="The selected record, value or key">Selection</button>
             <button type="button" role="tab" data-itab="insert" aria-selected="false" title="New records, keys and sections, and pieces of code">Insert</button>
@@ -304,6 +315,6 @@ addEventListener('message', e =&gt; {
 
 <?php include __DIR__ . '/footer.php'; ?>
 
-<script type="module" src="/js/app.js?v=39"></script>
+<script type="module" src="/js/app.js?v=41"></script>
 </body>
 </html>

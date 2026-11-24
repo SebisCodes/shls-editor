@@ -4,11 +4,12 @@
  * in the JSON Editor (a new tab).
  */
 
-import { escapeHtml } from './shls.js?v=7';
-import { formatJsonText, getTokenCount } from './convert.js?v=8';
+import { escapeHtml } from './shls.js?v=8';
+import { formatJsonText, getTokenCount } from './convert.js?v=9';
 import { saveFile, getSafeName } from './util.js?v=3';
-import { state, ui, JSON_SITE, COPIED, getElement, showToast, translate, getCurrentSection } from './state.js?v=2';
-import { getConversion, formatAsEncoder, CONVERSION_EXTENSIONS, MEDIA_TYPES } from './conversion.js?v=3';
+import { state, ui, JSON_SITE, COPIED, getElement, showToast, translate } from './state.js?v=3';
+import { getConversion, formatAsEncoder, CONVERSION_EXTENSIONS, MEDIA_TYPES } from './conversion.js?v=4';
+import { getCurrentSection } from './records-views.js?v=1';
 
 /** The indentation of the indented JSON the tokens are counted for, in spaces. */
 const JSON_INDENT = 2;

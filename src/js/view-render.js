@@ -3,7 +3,7 @@
  * marked) and its summary, and the path of the selection as buttons.
  */
 
-import { escapeHtml } from './shls.js?v=7';
+import { escapeHtml } from './shls.js?v=8';
 
 /** The fold arrow of a row that has rows below it. */
 const ARROW = '<span class="trow-toggle" aria-hidden="true"></span>';

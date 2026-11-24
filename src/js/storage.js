@@ -7,10 +7,10 @@
  * of its own keeps both versions; a hidden tab without edits of its own shows the other tab's.
  */
 
-import { state, areas, SETTINGS_KEY, showToast } from './state.js?v=2';
+import { state, areas, SETTINGS_KEY, showToast } from './state.js?v=3';
 import { store } from './files.js?v=8';
-import { showFileName } from './documents.js?v=3';
-import { setCode } from './history.js?v=3';
+import { showFileName } from './documents.js?v=4';
+import { setCode } from './history.js?v=4';
 
 /** The message shown when the browser storage is full while a document is stored. */
 const STORAGE_FULL_DOWNLOAD = 'The browser storage is full - download and delete documents under "My documents"';

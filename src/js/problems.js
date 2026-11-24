@@ -4,13 +4,14 @@
  * the code and its place in the records view.
  */
 
-import { escapeHtml } from './shls.js?v=7';
-import { state, areas, ui, NARROW_SCREEN } from './state.js?v=2';
+import { escapeHtml } from './shls.js?v=8';
+import { state, areas, ui, NARROW_SCREEN } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { showCodePosition } from './code-view.js?v=3';
-import { getLineStart, getLineEnd } from './text-position.js?v=2';
-import { renderNode } from './node-panel.js?v=3';
-import { showPane } from './layout.js?v=3';
+import { showCodePosition } from './code-view.js?v=4';
+import { getLineStart, getLineEnd } from './text-position.js?v=3';
+import { renderNode } from './node-panel.js?v=4';
+import { showPane } from './layout.js?v=4';
+import { getViewLine } from './records-views.js?v=1';
 
 /** The most problems the list shows. */
 const MAX_LISTED_PROBLEMS = 80;
@@ -70,6 +71,6 @@ function showClickedProblem(event) {
     const problem = state.problems[+entry.dataset.prob];
     if (NARROW_SCREEN.matches) showPane('code');
     showCodePosition(getLineStart(problem.line), true, getLineEnd(problem.line));
-    areas.view.selectLineRow(problem.line);
+    areas.view.selectLineRow(getViewLine(problem.line));
     renderNode();
 }
