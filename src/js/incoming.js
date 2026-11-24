@@ -7,7 +7,7 @@
 
 import { getRecordsAppendEdit } from './edits.js?v=9';
 import { store } from './files.js?v=8';
-import { VIEWER } from './sync.js?v=25';
+import { VIEWER } from './sync.js?v=26';
 import { state, ui, EDITOR, AI_DOCUMENT, showToast } from './state.js?v=3';
 import { setCode } from './history.js?v=5';
 import { getReadableModel } from './model.js?v=5';
