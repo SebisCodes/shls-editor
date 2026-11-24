@@ -7,10 +7,10 @@
 import { escapeHtml } from './shls.js?v=8';
 import { state, areas, ui, NARROW_SCREEN } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { showCodePosition } from './code-view.js?v=4';
+import { showCodePosition } from './code-view.js?v=5';
 import { getLineStart, getLineEnd } from './text-position.js?v=3';
-import { renderNode } from './node-panel.js?v=4';
-import { showPane } from './layout.js?v=4';
+import { renderNode } from './node-panel.js?v=5';
+import { showPane } from './layout.js?v=5';
 import { getViewLine } from './records-views.js?v=1';
 
 /** The most problems the list shows. */

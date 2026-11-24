@@ -9,9 +9,9 @@ import { getRecordsAppendEdit } from './edits.js?v=9';
 import { store } from './files.js?v=8';
 import { VIEWER } from './sync.js?v=25';
 import { state, ui, EDITOR, AI_DOCUMENT, showToast } from './state.js?v=3';
-import { setCode } from './history.js?v=4';
-import { getReadableModel } from './model.js?v=4';
-import { openDocument, createDocument } from './documents.js?v=4';
+import { setCode } from './history.js?v=5';
+import { getReadableModel } from './model.js?v=5';
+import { openDocument, createDocument } from './documents.js?v=5';
 
 /**
  * Which document a document from an AI goes into.

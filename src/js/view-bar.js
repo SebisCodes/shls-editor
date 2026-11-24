@@ -7,11 +7,11 @@
 import { createView } from './view.js?v=12';
 import { getPathText } from './view-path.js?v=2';
 import { state, areas, ui, NARROW_SCREEN, getElement, showToast, translate } from './state.js?v=3';
-import { showRowInCode, showLineBand } from './code-view.js?v=4';
+import { showRowInCode, showLineBand } from './code-view.js?v=5';
 import { getLineIndex } from './text-position.js?v=3';
-import { renderNode } from './node-panel.js?v=4';
-import { editInView, runViewAction } from './view-actions.js?v=4';
-import { showPane } from './layout.js?v=4';
+import { renderNode } from './node-panel.js?v=5';
+import { editInView, runViewAction } from './view-actions.js?v=5';
+import { showPane } from './layout.js?v=5';
 import { getViewLine } from './records-views.js?v=1';
 
 /** The pause after typing in the search before it searches, in milliseconds. */

@@ -8,8 +8,8 @@ import { openDialog } from './dialogs.js?v=5';
 import { createZip } from './zip.js?v=4';
 import { saveFile, getSafeName } from './util.js?v=3';
 import { state, areas, ui, EDITOR, COPIED, getElement, showToast, translate } from './state.js?v=3';
-import { updateModel } from './model.js?v=4';
-import { getConversion, formatAsEncoder, CONVERSION_EXTENSIONS, MEDIA_TYPES } from './conversion.js?v=4';
+import { updateModel } from './model.js?v=5';
+import { getConversion, formatAsEncoder, CONVERSION_EXTENSIONS, MEDIA_TYPES } from './conversion.js?v=5';
 
 /** The formats of the ZIP with all formats, in order. */
 const ZIP_FORMATS = ['shls', 'json', 'yaml', 'csv', 'txt'];

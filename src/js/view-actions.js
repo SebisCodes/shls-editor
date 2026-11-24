@@ -13,9 +13,9 @@
 import { openConfirmation } from './dialogs.js?v=5';
 import * as edits from './edits.js?v=9';
 import { state, areas, CANNOT_READ, showToast, translate, findSection } from './state.js?v=3';
-import { setCode, addPendingHistoryStep } from './history.js?v=4';
-import { showRowInCode } from './code-view.js?v=4';
-import { renderNode } from './node-panel.js?v=4';
+import { setCode, addPendingHistoryStep } from './history.js?v=5';
+import { showRowInCode } from './code-view.js?v=5';
+import { renderNode } from './node-panel.js?v=5';
 import { isTemplateEditWhole, TEMPLATE_EDIT_MESSAGE } from './template-lines.js?v=1';
 import { getTemplateRow, getTemplateRows, getExampleEditRefusal, getSelectedTemplatePlace, selectTemplatePlace, EXAMPLE_EDIT_MESSAGE } from './records-views.js?v=1';
 

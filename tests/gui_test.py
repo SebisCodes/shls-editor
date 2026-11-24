@@ -39,7 +39,7 @@ def check_that(cond, what):
 
 
 def show_side_panel(page, is_open):
-    """Opens or closes the side panel's drawer (it is closed at the start).
+    """Opens or closes the side panel's column (it is closed at the start).
 
     Args:
         page (Page): the editor's page.
@@ -186,7 +186,7 @@ with sync_playwright() as pw:
     page.wait_for_timeout(300)
 
     # --- Record form in the side panel ---
-    check_that(page.locator('#side-panel').is_hidden() and page.get_attribute('#btn-panel', 'aria-expanded') == 'false', 'the side panel is a closed drawer at the start')
+    check_that(page.locator('#side-panel').is_hidden() and page.get_attribute('#btn-panel', 'aria-expanded') == 'false', 'the side panel is closed at the start')
     show_side_panel(page, True)
     get_field_row(page, 'Name', 'Laptop B2').locator('.trow-k').click()
     page.wait_for_timeout(200)

@@ -11,7 +11,7 @@ import { getPathText } from './view-path.js?v=2';
 import { getRecordAt, getValueEdit, getSectionRenameEdit, getKeyRenameEdit } from './edits.js?v=9';
 import { state, areas, ui, getElements, showToast, translate, findSection } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { editCodeFromTree, runViewAction } from './view-actions.js?v=4';
+import { editCodeFromTree, runViewAction } from './view-actions.js?v=5';
 import { getSelectedTemplateRow, getTemplateRows, EXAMPLE_EDIT_MESSAGE } from './records-views.js?v=1';
 
 /**

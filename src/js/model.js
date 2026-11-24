@@ -7,14 +7,14 @@
 
 import { parseCodeModel } from './template-lines.js?v=1';
 import { state, areas, ui } from './state.js?v=3';
-import { renderProblems } from './problems.js?v=4';
-import { renderNode } from './node-panel.js?v=4';
-import { renderConvertResult } from './convert-panel.js?v=4';
-import { renderOutline } from './outline-panel.js?v=4';
-import { renderCode } from './code-view.js?v=4';
+import { renderProblems } from './problems.js?v=5';
+import { renderNode } from './node-panel.js?v=5';
+import { renderConvertResult } from './convert-panel.js?v=5';
+import { renderOutline } from './outline-panel.js?v=5';
+import { renderCode } from './code-view.js?v=5';
 import { updateRecordsView, getViewModel, getSelectedTemplatePlace, selectTemplatePlace } from './records-views.js?v=1';
-import { showHits } from './view-bar.js?v=4';
-import { renderTemplateControls } from './template-panel.js?v=1';
+import { showHits } from './view-bar.js?v=5';
+import { renderTemplateControls } from './template-panel.js?v=2';
 
 /**
  * Reads the code into the model now and draws everything that shows it.

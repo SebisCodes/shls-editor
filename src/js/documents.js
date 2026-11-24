@@ -9,11 +9,11 @@ import { openConfirmation } from './dialogs.js?v=5';
 import { store } from './files.js?v=8';
 import { createFilesDialog } from './files-dialog.js?v=2';
 import { state, areas, ui, DEFAULT_NAME, STORAGE_FULL, historyByDocument, getElement, getElements, showToast } from './state.js?v=3';
-import { setCode, addHistoryStep, updateHistoryButtons, undo, redo } from './history.js?v=4';
-import { saveToStorage } from './storage.js?v=4';
-import { renderNode } from './node-panel.js?v=4';
-import { renderConvert } from './convert-panel.js?v=4';
-import { openFilePicker } from './file-import.js?v=4';
+import { setCode, addHistoryStep, updateHistoryButtons, undo, redo } from './history.js?v=5';
+import { saveToStorage } from './storage.js?v=5';
+import { renderNode } from './node-panel.js?v=5';
+import { renderConvert } from './convert-panel.js?v=5';
+import { openFilePicker } from './file-import.js?v=5';
 import { getSelectedTemplatePlace, selectTemplatePlace } from './records-views.js?v=1';
 
 const newButton = getElement('#btn-new'), newMenu = getElement('#new-menu');

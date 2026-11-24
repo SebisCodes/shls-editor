@@ -12,12 +12,12 @@ import { store } from './files.js?v=8';
 import { BLANK } from './samples.js?v=3';
 import { state, areas, ui, AI_DOCUMENT, findSection } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { setCode } from './history.js?v=4';
-import { showCodePosition } from './code-view.js?v=4';
+import { setCode } from './history.js?v=5';
+import { showCodePosition } from './code-view.js?v=5';
 import { getLinePosition } from './text-position.js?v=3';
-import { getCodeEdit, showEditError, writeCodeEdit } from './view-actions.js?v=4';
-import { selectRowAtCursor } from './view-bar.js?v=4';
-import { openDocument, createDocument } from './documents.js?v=4';
+import { getCodeEdit, showEditError, writeCodeEdit } from './view-actions.js?v=5';
+import { selectRowAtCursor } from './view-bar.js?v=5';
+import { openDocument, createDocument } from './documents.js?v=5';
 import { getSelectedTemplateRow } from './records-views.js?v=1';
 
 /** The indentation of the JSON that get_records returns, in spaces. */

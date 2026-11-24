@@ -144,9 +144,8 @@ other documents. Every change is one step for Undo.
 ## Side panel
 
 The side panel holds **Selection**, **Insert**, **Convert** and **Outline**. The button at the top
-right of the work area opens it over the records, below the bar of the records view, and closes it
-again (Escape too); it is closed when the editor opens. The bar's controls stay in view and usable
-while it is open. On a phone it is the view **Edit**.
+right of the work area opens it as a column right of the records view, which gets narrower, and closes it
+again; it is closed when the editor opens. On a phone it is the view **Edit**.
 
 ## Templates with placeholders
 

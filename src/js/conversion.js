@@ -12,7 +12,7 @@ import { convertToYaml } from './yaml-text.js?v=4';
 import { convertToCsv, convertToJsonl } from './table-text.js?v=3';
 import { openConfirmation } from './dialogs.js?v=5';
 import { state, areas, CANNOT_READ, NO_SECTIONS, showToast, translate, findSection } from './state.js?v=3';
-import { setCode } from './history.js?v=4';
+import { setCode } from './history.js?v=5';
 import { hasTemplateTags, TEMPLATE_FORMAT_MESSAGE } from './template-lines.js?v=1';
 import { getCurrentSection, getSelectedTemplatePlace, selectTemplatePlace } from './records-views.js?v=1';
 

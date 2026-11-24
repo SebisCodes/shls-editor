@@ -8,7 +8,7 @@ import { highlight, escapeHtml } from './shls.js?v=8';
 import { state, areas, ui, LINE_HEIGHT, NARROW_SCREEN, formatSize } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
 import { getLineIndex, getColumnIndex, getLineStart, getLineEnd } from './text-position.js?v=3';
-import { updateHistoryButtons } from './history.js?v=4';
+import { updateHistoryButtons } from './history.js?v=5';
 import { getTemplateLines } from './records-views.js?v=1';
 
 /** Longer code is shown without highlighting, so typing stays fast. */

@@ -10,7 +10,7 @@ import { convertFromYaml, importYamlLibrary } from './yaml-text.js?v=4';
 import { convertFromCsv, convertFromJsonl } from './table-text.js?v=3';
 import { openConfirmation } from './dialogs.js?v=5';
 import { getElement, showToast, translate, DEFAULT_NAME } from './state.js?v=3';
-import { createDocument } from './documents.js?v=4';
+import { createDocument } from './documents.js?v=5';
 
 /** The largest file that is opened, in bytes. */
 const MAX_FILE_SIZE = 8 * 1024 * 1024;

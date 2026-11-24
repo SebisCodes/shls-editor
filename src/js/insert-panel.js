@@ -5,9 +5,9 @@
 
 import { escapeHtml } from './shls.js?v=8';
 import { state, ui } from './state.js?v=3';
-import { runViewAction } from './view-actions.js?v=4';
-import { writeCodeRange } from './code-input.js?v=4';
-import { addHistoryStep } from './history.js?v=4';
+import { runViewAction } from './view-actions.js?v=5';
+import { writeCodeRange } from './code-input.js?v=5';
+import { addHistoryStep } from './history.js?v=5';
 
 /** The length of a date as YYYY-MM-DD. */
 const DATE_LENGTH = 10;

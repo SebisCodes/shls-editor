@@ -29,7 +29,7 @@
               the examples (also when they come with the load, from the first paint), the switch shows the
               template view with the tags, a click leads to the template's line, a value with an example is
               refused with a message, a copied value is changed in the template, the "Placeholders" box is
-              closed and puts a tag at the cursor as one undo step, the side panel is a closed drawer, "get"
+              closed and puts a tag at the cursor as one undo step, the side panel is closed, "get"
               carries the template; with the option off nothing of this is there
 Needs Node; --browser needs Playwright with Chrome."""
 import html
@@ -480,9 +480,11 @@ def run_view_checks(browser):
     work_before = get_box(frame, '.draw-pane')
     check_that(frame.evaluate("getComputedStyle(document.querySelector('#side-panel')).display") == 'none', 'the side panel is closed at the start')
     frame.click('#btn-panel')
-    check_that(frame.evaluate("getComputedStyle(document.querySelector('#side-panel')).display") != 'none' and get_box(frame, '#btn-panel') == panel_button
-               and get_box(frame, '.draw-pane') == work_before, 'its button opens it over the records view, and nothing moves')
-    check_that(get_box(frame, '#side-panel')['y'] >= get_box(frame, '.tree-toolbar')['y'] + get_box(frame, '.tree-toolbar')['height'], 'the drawer starts below the bar of the records view')
+    work_open, panel_open = get_box(frame, '.draw-pane'), get_box(frame, '#side-panel')
+    check_that(panel_open['width'] > 0 and get_box(frame, '#btn-panel') == panel_button
+               and work_open['width'] < work_before['width'],
+               'its button opens it as a column that narrows the records view, and stays in its place')
+    check_that(abs(panel_open['x'] - (work_open['x'] + work_open['width'])) <= 1, 'the side panel stands right of the records view')
     page.evaluate(f"() => {{ document.querySelector('#ed').contentWindow.postMessage({{ type: '{PREFIX}:template', clear: true }}, '*'); }}")
     frame.wait_for_function("document.querySelector('#tree').innerText.includes('[name]')", timeout=10000)
     frame.click('#tree-open')
@@ -512,7 +514,7 @@ def run_browser_checks():
         page.wait_for_timeout(500)
         check_that(page.locator('#hl .tp').count() == 0 and '{{name}}' in page.inner_text('#tree'), 'option off: the tags are SHLS text in the records')
         check_that(page.locator('#view-switch').is_hidden() and page.locator('#placeholder-box').is_hidden() and page.locator('#view-note').is_hidden(), 'option off: no switch, no box, no note')
-        check_that(page.evaluate("getComputedStyle(document.querySelector('#side-panel')).display") == 'none', 'option off: the side panel is a closed drawer as well')
+        check_that(page.evaluate("getComputedStyle(document.querySelector('#side-panel')).display") == 'none', 'option off: the side panel is closed at the start as well')
         page.close()
         browser.close()
 

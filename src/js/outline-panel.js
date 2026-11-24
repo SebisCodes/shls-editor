@@ -6,8 +6,8 @@
 import { escapeHtml } from './shls.js?v=8';
 import { state, areas, ui, NARROW_SCREEN, translate } from './state.js?v=3';
 import { formatCount } from './util.js?v=3';
-import { showRowInCode } from './code-view.js?v=4';
-import { showPane } from './layout.js?v=4';
+import { showRowInCode } from './code-view.js?v=5';
+import { showPane } from './layout.js?v=5';
 import { selectTemplatePlace } from './records-views.js?v=1';
 
 /**

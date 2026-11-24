@@ -7,9 +7,9 @@
 
 import { state, ui, getElement } from './state.js?v=3';
 import { TEMPLATE_SYNTAX } from './template-lines.js?v=1';
-import { writeCodeRange } from './code-input.js?v=4';
-import { addHistoryStep, addPendingHistoryStep } from './history.js?v=4';
-import { renderRecordsView } from './model.js?v=4';
+import { writeCodeRange } from './code-input.js?v=5';
+import { addHistoryStep, addPendingHistoryStep } from './history.js?v=5';
+import { renderRecordsView } from './model.js?v=5';
 import { startViewSwitch, showViewSwitch, showViewNote, createPlaceholderBox, getListedPlaceholders } from './template-controls.js?v=2';
 import { getViewMode, setViewMode, isExampleViewFailed, getTemplateExamples } from './records-views.js?v=1';
 
